@@ -291,6 +291,15 @@ function blogCardTemplate(post) {
   `;
 }
 
+function authorBlockTemplate() {
+  return `
+    <div class="author-block">
+      <p class="author-name">Author: Vivek Sabhanayakam</p>
+      <p class="author-link">LinkedIn: <a class="text-link" href="https://www.linkedin.com/in/vivekanandhan-sabhanayakam-11320720/" target="_blank" rel="noopener noreferrer">vivekanandhan-sabhanayakam-11320720</a></p>
+    </div>
+  `;
+}
+
 function renderBlogList(containerId, limit) {
   const container = document.getElementById(containerId);
   if (!container) {
@@ -325,6 +334,7 @@ function renderPost() {
     <h1>${post.title}</h1>
     <p class="blog-meta">${formatDate(post.date)} • ${post.category}</p>
     <div class="blog-post-content">${post.content}</div>
+    ${authorBlockTemplate()}
   `;
 }
 
