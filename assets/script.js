@@ -1,5 +1,21 @@
 const BLOG_POSTS = [
   {
+    id: "kubernetes-debug-imagepullbackoff-crashloopbackoff",
+    title: "How to Debug Kubernetes ImagePullBackOff and CrashLoopBackOff Errors: A Production Guide",
+    date: "2026-11-01",
+    category: "Kubernetes Operations",
+    excerpt: "A production-first workflow to diagnose ImagePullBackOff and CrashLoopBackOff using structured kubectl troubleshooting.",
+    url: "tech-blogs/kubernetes-debug-imagepullbackoff-crashloopbackoff/"
+  },
+  {
+    id: "terraform-modules-aws-high-availability",
+    title: "Structuring Production-Grade Terraform Modules for Highly Available AWS Architectures",
+    date: "2026-11-01",
+    category: "Terraform / AWS",
+    excerpt: "Design safer, reusable Terraform modules with isolated state and HA-aware patterns for enterprise AWS environments.",
+    url: "tech-blogs/terraform-modules-aws-high-availability/"
+  },
+  {
     id: "managed-vs-self-managed-kubernetes",
     title: "Managed vs. Self-Managed Kubernetes: Architectural Differences, Trade-offs, and How to Choose",
     date: "2026-10-31",
@@ -264,12 +280,13 @@ function formatDate(dateString) {
 }
 
 function blogCardTemplate(post) {
+  const href = post.url ? post.url : `blog-post.html?id=${post.id}`;
   return `
     <article class="blog-card">
       <p class="blog-meta">${formatDate(post.date)} • ${post.category}</p>
       <h3>${post.title}</h3>
       <p>${post.excerpt}</p>
-      <a class="text-link" href="blog-post.html?id=${post.id}">Read article →</a>
+      <a class="text-link" href="${href}">Read article →</a>
     </article>
   `;
 }

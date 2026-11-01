@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Debug Kubernetes ImagePullBackOff and CrashLoopBackOff Errors | AI Platforms Technologies</title>
+  <meta name="description" content="Production guide to debug Kubernetes ImagePullBackOff and CrashLoopBackOff using structured kubectl workflows.">
+  <meta name="google-site-verification" content="FXTfAF-mA0dYLwl2NNplePzsZAmn9EXNVAhI91aB2O4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../../index.html">AI Platforms Technologies</a>
+      <nav class="main-nav">
+        <a href="../../index.html#programs">Programs</a>
+        <a href="../../index.html#why-us">Why Us</a>
+        <a href="../../blogs.html">Tech Blogs</a>
+        <a href="../../index.html#contact">Contact</a>
+      </nav>
+      <a class="btn btn-sm" href="../../index.html#contact">Enroll Now</a>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <article class="blog-post">
+        <h1>How to Debug Kubernetes ImagePullBackOff and CrashLoopBackOff Errors: A Production Guide</h1>
+        <p class="blog-meta">By Vivek Sabhanayakam</p>
+        <div class="blog-post-content">
+          <p>When a pod fails to deploy in production, ImagePullBackOff and CrashLoopBackOff are two of the most common errors infrastructure engineers encounter. While textbook guides offer generic advice, debugging these issues in enterprise multi-node clusters—whether on-premises or AWS EKS—requires a structured and methodical approach.</p>
+          <p>Let’s break down exactly how to diagnose and resolve these lifecycle failures using native kubectl troubleshooting workflows.</p>
+
+          <h2>Understanding the Pod Lifecycle States</h2>
+          <ol>
+            <li><strong>ImagePullBackOff:</strong> The container runtime cannot retrieve the specified container image. Kubernetes backs off and retries pulls in controlled intervals.</li>
+            <li><strong>CrashLoopBackOff:</strong> The image was pulled and container started, but the application process exited/crashed quickly. Kubernetes restarts it repeatedly with increasing delay.</li>
+          </ol>
+
+          <h2>Phase 1: Resolving ImagePullBackOff</h2>
+          <p>When a pod hangs in ImagePullBackOff, root causes usually map to authentication, connectivity, or image reference mistakes.</p>
+
+          <h3>Step 1: Check the event log</h3>
+          <pre><code>kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;</code></pre>
+          <p>Always inspect the <strong>Events</strong> section at the bottom for kubelet-level pull errors.</p>
+
+          <h3>Scenario A: Repository does not exist / may require docker login</h3>
+          <p>If you pull from private ECR or GitLab registry, image pull secrets may be missing in the namespace.</p>
+          <pre><code>kubectl get secret regsecret -n &lt;namespace&gt;</code></pre>
+          <p>Ensure your pod/deployment references <code>imagePullSecrets</code> and that the secret exists in the same namespace.</p>
+
+          <h3>Scenario B: Connection refused</h3>
+          <p>In hybrid/on-prem setups, outbound egress to Docker Hub/quay.io may be blocked by proxies/firewalls.</p>
+          <p>Validate node-level connectivity and container runtime proxy configuration.</p>
+
+          <h2>Phase 2: Resolving CrashLoopBackOff</h2>
+          <p>CrashLoopBackOff means infra startup succeeded; application/runtime context failed.</p>
+
+          <h3>Step 1: Inspect previous container logs</h3>
+          <pre><code>kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt; --previous</code></pre>
+          <p>The <code>--previous</code> flag is critical because it fetches logs from the container instance that crashed just before restart.</p>
+
+          <h3>Common production root causes</h3>
+          <ol>
+            <li><strong>Missing environment/config dependencies:</strong> ConfigMap/Secret not available or not mounted correctly.</li>
+            <li><strong>Entrypoint/CMD issues:</strong> non-executable script, invalid path, wrong command arguments (often exit code 1/127).</li>
+            <li><strong>Probe misconfiguration:</strong> wrong liveness/readiness path/port causing forced restarts.</li>
+          </ol>
+
+          <h2>Production Checklist</h2>
+          <ul>
+            <li>Did I verify image name and tag (including registry path)?</li>
+            <li>Is private registry secret present in the same namespace?</li>
+            <li>Did I use <code>kubectl logs --previous</code> to inspect crash cause?</li>
+            <li>Are ConfigMaps/Secrets mounted and readable by the app?</li>
+            <li>Are liveness/readiness probes mapped to valid endpoints?</li>
+          </ul>
+
+          <p>Mastering these workflows is core to becoming a dependable platform engineer in production environments.</p>
+        </div>
+      </article>
+
+      <p class="promo-banner"><em>Struggling with production cloud deployments? Learn how to build and debug enterprise systems directly from a 20+ year practitioner. Join Vivek Sabhanayakam for a <strong>Free Trial Session</strong> in our upcoming AWS &amp; Kubernetes Bootcamps. <a class="text-link" href="../../index.html">Back to main page</a>.</em></p>
+      <p class="section-note"><a class="text-link" href="../../blogs.html">← Back to all blogs</a></p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <p>© <span id="year"></span> AI Platforms Technologies. All rights reserved.</p>
+      <a href="../../blogs.html">Tech Blogs</a>
+    </div>
+  </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/917418029614" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+    WhatsApp Us
+  </a>
+
+  <script src="../../assets/script.js"></script>
+</body>
+</html>

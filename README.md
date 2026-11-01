@@ -87,4 +87,5 @@ Each post uses:
 - [assets/styles.css](C:/Users/vivek/Documents/Co-Pilot/Website/assets/styles.css) - Styling
 - [assets/script.js](C:/Users/vivek/Documents/Co-Pilot/Website/assets/script.js) - Blog + course detail content and rendering logic
 - [assets/logos/](C:/Users/vivek/Documents/Co-Pilot/Website/assets/logos) - Kubernetes, CNCF, and AWS logo assets used across pages
+- [tech-blogs/](C:/Users/vivek/Documents/Co-Pilot/Website/tech-blogs) - SEO-friendly blog URLs for long-form posts
 - [CNAME](C:/Users/vivek/Documents/Co-Pilot/Website/CNAME) - Custom domain for GitHub Pages
